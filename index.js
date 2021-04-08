@@ -5,6 +5,7 @@ const MongoClient = require('mongodb').MongoClient;
 require('dotenv').config();
 const app = express();
 const port = 5000;
+
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.w8sm0.mongodb.net/${process.env.DB_NAME}`;
 
 app.use(express.json());
@@ -57,5 +58,6 @@ client.connect(err => {
 
 });
 
-app.listen(process.env.PORT || port, () => {  
+app.listen(process.env.PORT || port, () => {
+  console.log("Listening to port", port);  
 })
