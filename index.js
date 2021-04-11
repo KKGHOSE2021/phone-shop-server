@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const MongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectID;
 require('dotenv').config();
 const app = express();
 const port = 5000;
@@ -33,11 +34,21 @@ client.connect(err => {
         })
     })
 
-    app.get('/product/:price', (req, res)=>{
-      collection.find({price: req.params.price}).toArray((err, documents)=>{
+    app.get('/checkout/:id', (req, res)=>{        
+        collection.find({_id: ObjectId(req.params.id)}).toArray((err, documents)=>{
           res.send(documents[0]);
       })
   })
+
+    app.delete('/delete/:id', (req, res)=>{        
+        console.log("server side delete id:", ObjectId(req.params.id));
+        collection.deleteOne({_id: ObjectId(req.params.id)})
+        .then(result=>{
+            console.log(result.deletedCount);
+            res.send(result.deletedCount);
+    })
+    })
+
 
     
     app.post('/addOrder', (req, res)=>{
